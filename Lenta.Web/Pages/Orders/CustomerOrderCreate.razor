@@ -1,0 +1,110 @@
+﻿@page "/orders/create"
+@inherits CustomerOrderCreateBase
+@attribute [Authorize(Roles = "klientuAptarnautojas")]
+
+@if (Order != null)
+{
+    <div class="container">
+        <h1 class="mb-4">Sukurti užsakymą</h1>
+        <EditForm Model="@Order" OnValidSubmit="@HandleFormSubmit" Context="createOrder">
+            <ObjectGraphDataAnnotationsValidator />
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Užsakovo informacija</h4>
+                    <div class="d-flex">
+                        <div class="form-group flex-fill mr-3">
+                            <label for="customer-firstname">Vardas</label>
+                            <InputText class="form-control" @bind-Value="Order.Customer.FirstName" id="customer-firstname" />
+                            <ValidationMessage For="@(() => Order.Customer.FirstName)" />
+                        </div>
+                        <div class="form-group flex-fill">
+                            <label for="customer-lastname">Pavardė</label>
+                            <InputText class="form-control" @bind-Value="Order.Customer.LastName" id="customer-lastname" />
+                            <ValidationMessage For="@(() => Order.Customer.LastName)" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Telefono numeris</label>
+                        <InputText class="form-control" @bind-Value="Order.Customer.Phone" id="customer-phone" />
+                        <ValidationMessage For="@(() => Order.Customer.Phone)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Elektroninis paštas</label>
+                        <InputText class="form-control" @bind-Value="Order.Customer.Email" id="customer-email" />
+                        <ValidationMessage For="@(() => Order.Customer.Email)" />
+                    </div>
+                </div>
+            </div>
+
+            <EditForm Model="OrderItem" Context="addProduct" OnValidSubmit="AddProduct">
+                <ObjectGraphDataAnnotationsValidator />
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Pridėti prekę</h4>
+                        <div class="form-group">
+                            <label for="orderitem-product-name">Prekės pavadinimas</label>
+                            <InputText class="form-control" @bind-Value="OrderItem.Product.Name" id="orderitem-product-name" />
+                            <ValidationMessage For="@(() => OrderItem.Product.Name)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="orderitem-product-description">Prekės aprašymas</label>
+                            <InputTextArea class="form-control" @bind-Value="OrderItem.Product.Description" style="height: 200px;" id="orderitem-product-description" />
+                            <ValidationMessage For="@(() => OrderItem.Product.Description)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="orderitem-quantity">Kiekis</label>
+                            <InputNumber class="form-control" @bind-Value="OrderItem.Quantity" id="orderitem-quantity" />
+                            <ValidationMessage For="@(() => OrderItem.Quantity)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="orderitem-unitprice">Vieneto kaina</label>
+                            <InputNumber class="form-control" @bind-Value="OrderItem.UnitPrice" id="orderitem-unitprice" />
+                            <ValidationMessage For="@(() => OrderItem.UnitPrice)" />
+                        </div>
+                        <button type="submit" class="btn btn-success">Pridėti</button>
+                    </div>
+                </div>
+            </EditForm>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Pasirinktos prekės</h4>
+                    @if (Order.OrderItems.Count == 0)
+                    {
+                        <p>Nėra pasirinkta jokių prekių</p>
+                    }
+                    else
+                    {
+                        @for (int i = 0; i < Order.OrderItems.Count(); i++)
+                        {
+                            var orderItem = Order.OrderItems[i];
+                            int buffer = i;
+                            <div class="position-relative">
+                                <hr />
+                                <div class="form-group">
+                                    <label>Pavadinimas</label>
+                                    <input class="form-control input-sm" value="@orderItem.Product.Name" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Aprašymas</label>
+                                    <textarea class="form-control input-sm" value="@(String.IsNullOrEmpty(orderItem.Product.Description) ? "-" : orderItem.Product.Description)" disabled></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Kiekis</label>
+                                    <input class="form-control input-sm" value="@orderItem.Quantity" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Vieneto kaina</label>
+                                    <input class="form-control input-sm" value="@orderItem.UnitPrice" disabled>
+                                </div>
+                                <button class="btn btn-danger btn-sm position-absolute mt-2 mr-2" type="button" style="top: 0; right: 0;" @onclick="@(() => RemoveProduct(buffer))">Panaikinti</button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </EditForm>
+    </div>
+}

@@ -1,0 +1,73 @@
+﻿@page "/processes"
+@inherits ProcessListBase
+@attribute [Authorize(Roles = "gamintojas, klientuAptarnautojas")]
+
+@if (IsLoading == false)
+{
+    <div class="row flow-offset-1">
+        <h1 class="mb-4">Gamybos procesų katalogas</h1>
+        <div class="w-100 d-flex justify-content-between mb-2">
+            <div>
+                <AuthorizeView Roles="gamintojas">
+                    <a class="btn btn-success btn-rounded btn-sm my-0 d-table" style="color: white;" href="processes/create">Sukurti</a>
+                </AuthorizeView>
+            </div>
+            <div class="table-filter">
+                <div class="filter-group ml-3">
+                    <label>Pavadinimas</label>
+                    <input type="text" class="form-control form-control-sm ml-2" @bind="SearchQuery" />
+                </div>
+                <button type="button" class="btn btn-primary ml-3" @onclick="HandleSearch">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Aprašymas</th>
+                    <th>Užimtumas</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var process in PagedResponse.Data)
+                {
+                    <tr>
+                        <td>@process.Name</td>
+                        <td>
+                            <pre>@(String.IsNullOrEmpty(process.Description) ? "-" : process.Description)</pre>
+                        </td>
+                        <td style="color: @GetStatusColor(@process.Status)">@process.Status</td>
+                        <td>
+                            <AuthorizeView Roles="gamintojas">
+                                <a href="@($"/processes/edit/{process.Id}")">Redaguoti</a>
+                                <span>|</span>
+                                <a href="#" @onclick="@(() => HandleProcessDelete(process.Id, process.Name))" @onclick:preventDefault>Ištrinti</a>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="w-100 d-flex justify-content-between">
+            <p class="text-secondary">
+                Rodomi
+                <b>@PagedResponse.Data.Count()</b>
+                įrašai iš
+                <b>@PagedResponse.TotalRecords</b>
+            </p>
+            <ul class="pagination">
+                <li class="page-item @(PagedResponse.PreviousPage != null ? "" : "disabled") ">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber - 1))">Ankstesnis</a>
+                </li>
+                <li class="page-item disabled"><a class="page-link" href="#">@PagedResponse.PageNumber</a></li>
+                <li class="page-item @(PagedResponse.NextPage != null ? "" : "disabled")">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber + 1))">Kitas</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+}

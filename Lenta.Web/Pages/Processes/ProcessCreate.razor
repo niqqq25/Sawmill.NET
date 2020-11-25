@@ -1,0 +1,32 @@
+﻿@page "/processes/create"
+@inherits ProcessCreateBase
+@attribute [Authorize(Roles = "gamintojas")]
+
+    <div class="container">
+        <h1 class="mb-4">Sukurti gamybos procesą</h1>
+        <EditForm Model="@Process" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="name">Pavadinimas</label>
+                <InputText id="name" class="form-control" @bind-Value="Process.Name" />
+                <ValidationMessage For="@(() => Process.Name)" />
+            </div>
+            <div class="form-group">
+                <label for="description">Aprašymas</label>
+                <InputTextArea id="description" class="form-control" @bind-Value="Process.Description" style="height: 200px;" />
+                <ValidationMessage For="@(() => Process.Description)" />
+            </div>
+            <div class="form-group">
+                <label for="processStatus">Proceso būsena</label>
+                <InputSelect class="form-control" @bind-Value="Process.Status" id="processStatus">
+                    @foreach (var processStatus in Enum.GetValues(typeof(ManufacturingProcessStatus)))
+                    {
+                        <option value="@processStatus">@processStatus</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Process.Status)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </EditForm>
+    </div>

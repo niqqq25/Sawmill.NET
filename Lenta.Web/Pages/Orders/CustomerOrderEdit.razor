@@ -1,0 +1,74 @@
+﻿@page "/orders/edit/{id}"
+@inherits CustomerOrderEditBase
+@attribute [Authorize(Roles = "klientuAptarnautojas, sandelininkas")]
+
+@if (Order != null)
+{
+    <div class="container">
+        <h1 class="mb-4">Redaguoti užsakymą</h1>
+        <EditForm Model="@OrderUpdate" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="id">Kodas</label>
+                <input id="id" class="form-control" Value="@Order.Id.ToString()" disabled />
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Užsakovo informacija</h4>
+                    <div class="d-flex">
+                        <div class="form-group flex-fill mr-3">
+                            <label for="customer-firstname">Vardas</label>
+                            <input class="form-control" value="@Order.Customer.FirstName" id="customer-firstname" disabled>
+                        </div>
+                        <div class="form-group flex-fill">
+                            <label for="customer-lastname">Pavardė</label>
+                            <input class="form-control" value="@Order.Customer.LastName" id="customer-lastname" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Telefono numeris</label>
+                        <input class="form-control" value="@Order.Customer.Phone" id="customer-phone" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Elektroninis paštas</label>
+                        <input class="form-control" value="@Order.Customer.Email" id="customer-email" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Prekės</h4>
+                    @foreach (var orderItem in Order.OrderItems)
+                    {
+                        <hr />
+                        <div class="form-group">
+                            <label>Pavadinimas</label>
+                            <input class="form-control" value="@orderItem.Product.Name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Aprašymas</label>
+                            <textarea class="form-control" value="@(String.IsNullOrEmpty(orderItem.Product.Description) ? "-" : orderItem.Product.Description)" disabled></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Kiekis</label>
+                            <input class="form-control" value="@orderItem.Quantity" disabled>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="orderStatus">Užsakymo būsena</label>
+                <InputSelect class="form-control" @bind-Value="OrderUpdate.Status" id="orderStatus">
+                    @foreach (var orderStatus in Enum.GetValues(typeof(CustomerOrderStatus)))
+                        {
+                        <option value="@orderStatus">@orderStatus</option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => OrderUpdate.Status)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Redaguoti</button>
+        </EditForm>
+    </div>
+}
+

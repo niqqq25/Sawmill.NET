@@ -1,0 +1,35 @@
+﻿@page "/users"
+@inherits UserListBase
+@attribute [Authorize(Roles = "adminas")]
+
+<div class="row flow-offset-1">
+    <h1 class="mb-4">Darbuotojų paskyros</h1>
+    <div class="w-100 d-flex mb-2">
+        <a class="btn btn-success btn-rounded btn-sm my-0 d-table" style="color: white;" href="users/create">Sukurti</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Vardas</th>
+                <th>Pavardė</th>
+                <th>El. paštas</th>
+                <th>Rolė</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Users)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <a href="#" @onclick="@(() => HandleUserDelete(user.Id, $"{user.FirstName} {user.LastName}"))" @onclick:preventDefault>Ištrinti</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

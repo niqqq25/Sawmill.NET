@@ -1,0 +1,68 @@
+﻿@page "/orders/{id}"
+@inherits CustomerOrderDetailsBase
+@attribute [Authorize(Roles = "klientuAptarnautojas, sandelininkas")]
+
+@if (!IsLoading)
+{
+    <div class="container">
+        <h1 class="mb-4">Užsakymo informacija</h1>
+        <form>
+            <div class="form-group">
+                <label for="id">Kodas</label>
+                <input id="id" class="form-control" Value="@Order.Id.ToString()" disabled />
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Užsakovo informacija</h4>
+                    <div class="d-flex">
+                        <div class="form-group flex-fill mr-3">
+                            <label for="customer-firstname">Vardas</label>
+                            <input class="form-control" value="@Order.Customer.FirstName" id="customer-firstname" disabled>
+                        </div>
+                        <div class="form-group flex-fill">
+                            <label for="customer-lastname">Pavardė</label>
+                            <input class="form-control" value="@Order.Customer.LastName" id="customer-lastname" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Telefono numeris</label>
+                        <input class="form-control" value="@Order.Customer.Phone" id="customer-phone" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Elektroninis paštas</label>
+                        <input class="form-control" value="@Order.Customer.Email" id="customer-email" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Prekės</h4>
+                    @foreach (var orderItem in Order.OrderItems)
+                    {
+                        <hr />
+                        <div class="form-group">
+                            <label>Pavadinimas</label>
+                            <input class="form-control" value="@orderItem.Product.Name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Aprašymas</label>
+                            <textarea class="form-control" value="@(String.IsNullOrEmpty(orderItem.Product.Description) ? "-" : orderItem.Product.Description)" disabled></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Kiekis</label>
+                            <input class="form-control" value="@orderItem.Quantity" disabled>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="orderStatus">Užsakymo data</label>
+                <input id="orderStatus" class="form-control" value="@Order.OrderDate.ToString("yyyy-MM-dd HH:mm")" disabled />
+            </div>
+            <div class="form-group">
+                <label for="orderStatus">Užsakymo būsena</label>
+                <input id="orderStatus" class="form-control" value="@Order.Status" disabled />
+            </div>
+        </form>
+    </div>
+}

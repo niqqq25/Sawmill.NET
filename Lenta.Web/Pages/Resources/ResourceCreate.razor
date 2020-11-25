@@ -1,0 +1,37 @@
+﻿@page "/resources/create"
+@inherits ResourceCreateBase
+@attribute [Authorize(Roles = "sandelininkas")]
+
+    <div class="container">
+        <h1 class="mb-4">Sukurti žaliavą</h1>
+        <EditForm Model="@Resource" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="name">Pavadinimas</label>
+                <InputText id="name" class="form-control" @bind-Value="Resource.Name" />
+                <ValidationMessage For="@(() => Resource.Name)" />
+            </div>
+            <div class="form-group">
+                <label for="description">Aprašymas</label>
+                <InputTextArea id="description" class="form-control" @bind-Value="Resource.Description" style="height: 200px;" />
+                <ValidationMessage For="@(() => Resource.Description)" />
+            </div>
+            <div class="form-group">
+                <label for="quantity">Kiekis</label>
+                <InputNumber id="quantity" class="form-control" @bind-Value="Resource.Quantity" />
+                <ValidationMessage For="@(() => Resource.Quantity)" />
+            </div>
+            <div class="form-group">
+                <label for="quantityType">Kiekio Tipas</label>
+                <InputSelect class="form-control" @bind-Value="Resource.QuantityType" id="quantityType">
+                    @foreach (var quantityType in Enum.GetValues(typeof(Units)))
+                    {
+                        <option value="@quantityType">@quantityType</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Resource.QuantityType)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </EditForm>
+    </div>

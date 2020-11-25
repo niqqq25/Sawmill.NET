@@ -1,0 +1,47 @@
+﻿@page "/users/create"
+@inherits UserCreateBase
+@attribute [Authorize(Roles = "adminas")]
+
+<h1>Sukurti darbuotojo paskyrą</h1>
+<EditForm Model="@User" OnValidSubmit="@HandleUserCreate">
+    <DataAnnotationsValidator />
+    <div class="d-flex">
+        <div class="form-group flex-fill mr-3">
+            <label for="user-firstname">Vardas</label>
+            <InputText class="form-control" @bind-Value="User.FirstName" id="user-firstname" />
+            <ValidationMessage For="@(() => User.FirstName)" />
+        </div>
+        <div class="form-group flex-fill">
+            <label for="user-lastname">Pavardė</label>
+            <InputText class="form-control" @bind-Value="User.LastName" id="user-lastname" />
+            <ValidationMessage For="@(() => User.LastName)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="user-email">Elektroninis paštas</label>
+        <InputText class="form-control" @bind-Value="User.Email" id="user-email" />
+        <ValidationMessage For="@(() => User.Email)" />
+    </div>
+    <div class="form-group">
+        <label for="user-password">Slaptažodis</label>
+        <InputText type="password" class="form-control" @bind-Value="User.Password" id="user-password" />
+        <ValidationMessage For="@(() => User.Password)" />
+    </div>
+    <div class="form-group">
+        <label for="user-password-confirm">Pakartokite slaptažodį</label>
+        <InputText type="password" class="form-control" @bind-Value="User.ConfirmPassword" id="user-password-confirm" />
+        <ValidationMessage For="@(() => User.ConfirmPassword)" />
+    </div>
+    <div class="form-group">
+        <label for="role">Pareigos</label>
+        <InputSelect class="form-control" @bind-Value="User.Role" id="role">
+            <option value="">-</option>
+            @foreach (var role in Roles)
+            {
+                <option value="@role.Name">@role.Name</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() =>User.Role)" />
+    </div>
+    <button type="submit" class="btn btn-success">Sukurti</button>
+</EditForm>

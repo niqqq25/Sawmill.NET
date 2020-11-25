@@ -1,0 +1,85 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Lenta</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <AuthorizeView Roles="adminas">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="users">
+                    Darbuotojų paskyros
+                </NavLink>
+            </li>
+        </AuthorizeView>
+        <AuthorizeView Roles="sandelininkas">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="resources">
+                    Žaliavos
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="products">
+                    Prekės
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="orders">
+                    Klientų užsakymai
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="morders">
+                    Gamybos užsakymai
+                </NavLink>
+            </li>
+        </AuthorizeView>
+        <AuthorizeView Roles="gamintojas">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="morders">
+                    Užsakymai
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="processes">
+                    Gamybos procesai
+                </NavLink>
+            </li>
+        </AuthorizeView>
+        <AuthorizeView Roles="klientuAptarnautojas">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="resources">
+                    Žaliavos
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="products">
+                    Prekės
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="orders">
+                    Užsakymai
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="processes">
+                    Gamybos procesai
+                </NavLink>
+            </li>
+        </AuthorizeView>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

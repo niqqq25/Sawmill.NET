@@ -1,0 +1,37 @@
+﻿@page "/products/create"
+@inherits ProductCreateBase
+@attribute [Authorize(Roles = "sandelininkas")]
+
+    <div class="container">
+        <h1 class="mb-4">Sukurti produktą</h1>
+        <EditForm Model="@Product" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="name">Pavadinimas</label>
+                <InputText id="name" class="form-control" @bind-Value="Product.Name" />
+                <ValidationMessage For="@(() => Product.Name)" />
+            </div>
+            <div class="form-group">
+                <label for="description">Aprašymas</label>
+                <InputTextArea id="description" class="form-control" @bind-Value="Product.Description" style="height: 200px;" />
+                <ValidationMessage For="@(() => Product.Description)" />
+            </div>
+            <div class="form-group">
+                <label for="unitsInStock">Esamas Kiekis</label>
+                <InputNumber id="unitsInStock" class="form-control" @bind-Value="Product.UnitsInStock" />
+                <ValidationMessage For="@(() => Product.UnitsInStock)" />
+            </div>
+            <div class="form-group">
+                <label for="unitsOnOrder">Užsakytas Kiekis</label>
+                <InputNumber id="unitsOnOrder" class="form-control" @bind-Value="Product.UnitsOnOrder" />
+                <ValidationMessage For="@(() => Product.UnitsOnOrder)" />
+            </div>
+            <div class="form-group">
+                <label for="unitPrice">Vieneto Kaina (€)</label>
+                <InputNumber id="unitPrice" class="form-control" @bind-Value="Product.UnitPrice" />
+                <ValidationMessage For="@(() => Product.UnitPrice)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </EditForm>
+    </div>

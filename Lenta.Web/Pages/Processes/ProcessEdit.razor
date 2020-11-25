@@ -1,0 +1,33 @@
+﻿@page "/processes/edit/{id}"
+@inherits ProcessEditBase
+@attribute [Authorize(Roles = "gamintojas")]
+
+@if (Process != null)
+{
+    <div class="container">
+        <h1 class="mb-4">Redaguoti gamybos procesą</h1>
+        <EditForm Model="@Process" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="name">Pavadinimas</label>
+                <input id="name" class="form-control" value="Process.Name" disabled />
+            </div>
+            <div class="form-group">
+                <label for="description">Aprašymas</label>
+                <textarea id="description" class="form-control" value="@(String.IsNullOrEmpty(Process.Description) ? "-" : Process.Description)" disabled />
+            </div>
+            <div class="form-group">
+                <label for="processStatus">Proceso būsena</label>
+                <InputSelect class="form-control" @bind-Value="Process.Status" id="processStatus">
+                    @foreach (var processStatus in Enum.GetValues(typeof(ManufacturingProcessStatus)))
+                        {
+                        <option value="@processStatus">@processStatus</option>
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => Process.Status)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Redaguoti</button>
+        </EditForm>
+    </div>
+}

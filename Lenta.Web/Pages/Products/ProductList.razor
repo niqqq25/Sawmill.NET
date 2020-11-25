@@ -1,0 +1,79 @@
+﻿@page "/products"
+@inherits ProductListBase
+@attribute [Authorize(Roles = "sandelininkas, klientuAptarnautojas")]
+
+@if (IsLoading == false)
+{
+    <div class="row flow-offset-1">
+        <h1 class="mb-4">Produktų katalogas</h1>
+        <div class="w-100 d-flex justify-content-between mb-2">
+            <div>
+                <AuthorizeView Roles="sandelininkas">
+                    <a class="btn btn-success btn-rounded btn-sm my-0 d-table" style="color: white;" href="products/create">Sukurti</a>
+                </AuthorizeView>
+            </div>
+            <div class="table-filter">
+                <div class="filter-group ml-3">
+                    <label>Pavadinimas</label>
+                    <input type="text" class="form-control form-control-sm ml-2" @bind="SearchQuery" />
+                </div>
+                <button type="button" class="btn btn-primary ml-3" @onclick="HandleSearch">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Aprašymas</th>
+                    <th>Esamas Kiekis</th>
+                    <th>Užsakytas Kiekis</th>
+                    <th>Vieneto Kaina</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in PagedResponse.Data)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>
+                            <pre>@(String.IsNullOrEmpty(product.Description) ? "-" : product.Description)</pre>
+                        </td>
+                        <td>@product.UnitsInStock</td>
+                        <td>@product.UnitsOnOrder</td>
+                        <td>@product.UnitPrice</td>
+                        <td>
+                            <AuthorizeView Roles="sandelininkas">
+                                <a href="@($"/products/edit/{product.Id}")">Redaguoti</a>
+                                <span>|</span>
+                                <a href="#" @onclick="@(() => HandleProductDelete(product.Id, product.Name))" @onclick:preventDefault>Ištrinti</a>
+                                <span>|</span>
+                                <a href="@($"/morders/create?product={product.Id}")">Gaminti</a>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="w-100 d-flex justify-content-between">
+            <p class="text-secondary">
+                Rodomi
+                <b>@PagedResponse.Data.Count()</b>
+                įrašai iš
+                <b>@PagedResponse.TotalRecords</b>
+            </p>
+            <ul class="pagination">
+                <li class="page-item @(PagedResponse.PreviousPage != null ? "" : "disabled") ">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber - 1))">Ankstesnis</a>
+                </li>
+                <li class="page-item disabled"><a class="page-link" href="#">@PagedResponse.PageNumber</a></li>
+                <li class="page-item @(PagedResponse.NextPage != null ? "" : "disabled")">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber + 1))">Kitas</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+}

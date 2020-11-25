@@ -1,0 +1,81 @@
+﻿@page "/orders"
+@inherits CustomerOrderListBase
+@attribute [Authorize(Roles = "klientuAptarnautojas, sandelininkas")]
+
+@if (IsLoading == false)
+{
+    <div class="row flow-offset-1">
+        <h1 class="mb-4">Užsakymų katalogas</h1>
+        <div class="w-100 d-flex justify-content-between mb-2">
+            <div>
+                <AuthorizeView Roles="klientuAptarnautojas">
+                    <a class="btn btn-success btn-rounded btn-sm my-0 d-table" style="color: white;" href="orders/create">Sukurti</a>
+                </AuthorizeView>
+            </div>
+            <div class="table-filter">
+                <div class="filter-group mr-3">
+                    <label>Seni pirmiau</label>
+                    <input type="checkbox" class="ml-2" @bind="IsDateAsc">
+                </div>
+                <div class="filter-group">
+                    <label>Statusas</label>
+                    <select class="form-control form-control-sm ml-2" @bind="SearchStatus">
+                        <option value="-1">Visi</option>
+                        @foreach (var orderStatus in Enum.GetValues(typeof(CustomerOrderStatus)))
+                        {
+                            <option value="@((int)orderStatus)">@orderStatus</option>
+                        }
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary ml-3" @onclick="HandleSearch">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Kodas</th>
+                    <th>Statusas</th>
+                    <th>Užsakymo Data</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in PagedResponse.Data)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td style="color:@GetStatusColor(order.Status)">@order.Status</td>
+                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <a href="@($"/orders/{order.Id}")">Peržiūrėti</a>
+                            <span>|</span>
+                            <a href="@($"/orders/edit/{order.Id}")">Redaguoti</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="w-100 d-flex justify-content-between">
+            <p class="text-secondary">
+                Rodomi
+                <b>@PagedResponse.Data.Count()</b>
+                įrašai iš
+                <b>@PagedResponse.TotalRecords</b>
+            </p>
+            <ul class="pagination">
+                <li class="page-item @(PagedResponse.PreviousPage != null ? "" : "disabled") ">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber - 1))">Ankstesnis</a>
+                </li>
+                <li class="page-item disabled"><a class="page-link" href="#">@PagedResponse.PageNumber</a></li>
+                <li class="page-item @(PagedResponse.NextPage != null ? "" : "disabled")">
+                    <a class="page-link" @onclick="@(() => HandlePageChange(PagedResponse.PageNumber + 1))">Kitas</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+}
+
+

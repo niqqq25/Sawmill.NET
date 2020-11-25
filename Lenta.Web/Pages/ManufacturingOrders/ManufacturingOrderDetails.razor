@@ -1,0 +1,42 @@
+﻿@page "/morders/{id}"
+@inherits ManufacturingOrderDetailsBase
+@attribute [Authorize(Roles = "sandelininkas, gamintojas")]
+
+@if (Order != null)
+{
+    <div class="container">
+        <h1 class="mb-4">Gamybos užsakymas</h1>
+        <form>
+            <div class="form-group">
+                <label for="id">Kodas</label>
+                <input id="id" class="form-control" Value="@Order.Id.ToString()" disabled />
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Prekė</h4>
+                    <div class="form-group">
+                        <label>Pavadinimas</label>
+                        <input class="form-control" Value="@Order.Product.Name" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Aprašymas</label>
+                        <textarea class="form-control" Value="@(String.IsNullOrEmpty(Order.Product.Description) ? "-" : Order.Product.Description)" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Kiekis</label>
+                <input id="quantity" class="form-control" Value="@Order.Quantity.ToString()" disabled />
+            </div>
+            <div class="form-group">
+                <label for="orderDate">Užsakymo data</label>
+                <input id="orderDate" class="form-control" Value="@Order.OrderDate.ToString("yyyy-MM-dd HH:mm")" disabled />
+            </div>
+            <div class="form-group">
+                <label for="orderStatus">Užsakymo būsena</label>
+                <input id="orderStatus" class="form-control" Value="@Order.Status" disabled />
+            </div>
+
+        </form>
+    </div>
+}

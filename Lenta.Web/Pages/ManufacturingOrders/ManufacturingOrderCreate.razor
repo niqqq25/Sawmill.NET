@@ -1,0 +1,28 @@
+﻿@page "/morders/create"
+@inherits ManufacturingOrderCreateBase
+@attribute [Authorize(Roles = "sandelininkas")]
+
+@if (!IsLoading)
+{
+    <div class="container">
+        <h1 class="mb-4">Sukurti gamybos užsakymą</h1>
+        <EditForm Model="@Order" OnValidSubmit="@HandleFormSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="name">Produkto pavadinimas</label>
+                <input id="name" class="form-control" value="@Product.Name" disabled />
+            </div>
+            <div class="form-group">
+                <label for="description">Produkto aprašymas</label>
+                <textarea id="description" class="form-control" value="@Product.Description" disabled />
+            </div>
+            <div class="form-group">
+                <label for="quantity">Kiekis</label>
+                <InputNumber id="quantity" class="form-control" @bind-Value="Order.Quantity" />
+                <ValidationMessage For="@(() => Order.Quantity)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </EditForm>
+    </div>
+}

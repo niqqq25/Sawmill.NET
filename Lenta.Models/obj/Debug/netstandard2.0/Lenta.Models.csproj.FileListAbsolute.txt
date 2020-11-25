@@ -1,0 +1,9 @@
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\bin\Debug\netstandard2.0\Lenta.Models.deps.json
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\bin\Debug\netstandard2.0\Lenta.Models.dll
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\bin\Debug\netstandard2.0\Lenta.Models.pdb
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.csprojAssemblyReference.cache
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.AssemblyInfoInputs.cache
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.AssemblyInfo.cs
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.dll
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.pdb
+C:\Users\Andrius\source\repos\Lenta\Lenta.Models\obj\Debug\netstandard2.0\Lenta.Models.csproj.CoreCompileInputs.cache
